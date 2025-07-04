@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>گورنمنٹ مڈل سکول ٹاون پشین</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            font-family: 'Noto Nastaliq Urdu', serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e6f7ee 100%);
+            color: #1a3c40;
+            margin: 0;
+            padding: 0;
+            direction: rtl;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #1a5d74 0%, #2a8e5d 100%);
+            color: white;
+            padding: 15px 0;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+        
+        .logo {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+        }
+        
+        .logo span {
+            font-size: 2.5rem;
+            color: #2a8e5d;
+        }
+        
+        nav {
+            background: white;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .tabs {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            overflow-x: auto;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+        
+        .tab:hover {
+            background: #f0f9ff;
+        }
+        
+        .tab.active {
+            border-bottom: 3px solid #1a5d74;
+            color: #1a5d74;
+            background: #f0f9ff;
+        }
+        
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .module-title {
+            color: #1a5d74;
+            border-bottom: 2px solid #2a8e5d;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background: #1a5d74;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .status-fail {
+            background: #ffebee;
+            color: #c62828;
+            font-weight: bold;
+            border-radius: 20px;
+            padding: 5px 10px;
+        }
+        
+        .status-pass {
+            background: #e8f5e9;
+            color: #2e7d32;
+            font-weight: bold;
+            border-radius: 20px;
+            padding: 5px 10px;
+        }
+        
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        .whatsapp-btn:hover {
+            background: #128C7E;
+        }
+        
+        .whatsapp-btn i {
+            margin-left: 5px;
+        }
+        
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .alert-card {
+            background: #fff8e1;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .email-simulator {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .email-header {
+            border-bottom: 2px solid #1a5d74;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            background: #1a5d74;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 5px;
+        }
+        
+        .btn:hover {
+            background: #2a8e5d;
+        }
+        
+        .btn i {
+            margin-left: 8px;
+        }
+        
+        .export-btn {
+            background: #2a8e5d;
+        }
+        
+        .export-btn:hover {
+            background: #1a5d74;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: #1a5d74;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        @media (max-width: 768px) {
+            .tabs {
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+            }
+            
+            .tab {
+                padding: 12px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .logo-text {
+                font-size: 1.4rem;
+            }
+        }
+        
+        .badge {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+            margin: 0 5px;
+        }
+        
+        .badge-red {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+        
+        .badge-blue {
+            background: #bbdefb;
+            color: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-section">
+                <div class="logo">
+                    <span>ف</span>
+                </div>
+                <div class="logo-text">گورنمنٹ مڈل سکول ٹاون پشین رپورٹنگ سسٹم</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <nav>
+            <ul class="tabs">
+                <li class="tab active" data-tab="students">طلباء کی تفصیلات</li>
+                <li class="tab" data-tab="whatsapp">واٹس ایپ الرٹ</li>
+                <li class="tab" data-tab="dashboard">ڈیش بورڈ</li>
+                <li class="tab" data-tab="red-alert">ریڈ الرٹ</li>
+                <li class="tab" data-tab="email">ای میل الرٹ</li>
+            </ul>
+        </nav>
+
+        <!-- Students Data Display -->
+        <div id="students" class="tab-content active">
+            <h2 class="module-title">طلباء کی تفصیلات</h2>
+            <p>تمام طلباء کی تفصیلات اور کارکردگی دیکھیں۔</p>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>نام</th>
+                            <th>رول نمبر</th>
+                            <th>کلاس</th>
+                            <th>واٹس ایپ نمبر</th>
+                            <th>اردو</th>
+                            <th>ریاضی</th>
+                            <th>سائنس</th>
+                            <th>عربی</th>
+                            <th>اسلامیات</th>
+                            <th>کل نمبر</th>
+                            <th>حالت</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody">
+                        <!-- Student data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- WhatsApp Alert Generator -->
+        <div id="whatsapp" class="tab-content">
+            <h2 class="module-title">واٹس ایپ الرٹ</h2>
+            <p>کمزور طلباء کے والدین کو فوری الرٹ بھیجیں۔</p>
+            
+            <div class="alert-card">
+                <strong>نوٹ:</strong> صرف وہ طلباء جن کی حالت "کمزور" یا "ناکام" درج کی گئی ہے، ان کے لیے واٹس ایپ میسج بٹن دکھایا جائے گا۔
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>نام</th>
+                            <th>کلاس</th>
+                            <th>واٹس ایپ نمبر</th>
+                            <th>حالت</th>
+                            <th>ایکشن</th>
+                        </tr>
+                    </thead>
+                    <tbody id="whatsappTableBody">
+                        <!-- Weak students will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="tab-content">
+            <h2 class="module-title">ڈیش بورڈ</h2>
+            <p>سکول کی مجموعی کارکردگی کا تجزیہ کریں۔</p>
+            
+            <div class="charts-container">
+                <div class="chart-card">
+                    <h3>کلاس وار کارکردگی</h3>
+                    <canvas id="classPerformanceChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>مضمون وار اوسط نمبر</h3>
+                    <canvas id="subjectAverageChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>کامیاب / ناکام طلباء</h3>
+                    <canvas id="passFailChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Red Alert Page -->
+        <div id="red-alert" class="tab-content">
+            <h2 class="module-title">ریڈ الرٹ - کمزور طلباء</h2>
+            <p>ان طلباء کی فہرست جنہیں فوری توجہ کی ضرورت ہے۔</p>
+            
+            <div class="alert-card">
+                <strong>فوری کارروائی کی ضرورت:</strong> درج ذیل طلباء کی کارکردگی خطرناک حد تک کم ہے۔ براہ کرم ان کے والدین سے رابطہ کریں اور اضافی کلاسز کا انتظام کریں۔
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>نام</th>
+                            <th>رول نمبر</th>
+                            <th>کلاس</th>
+                            <th>واٹس ایپ نمبر</th>
+                            <th>کل نمبر</th>
+                            <th>حالت</th>
+                        </tr>
+                    </thead>
+                    <tbody id="redAlertTableBody">
+                        <!-- Weak students will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <button id="exportPdfBtn" class="btn export-btn"><i>📄</i> پی ڈی ایف برآمد کریں</button>
+        </div>
+
+        <!-- Email Alert -->
+        <div id="email" class="tab-content">
+            <h2 class="module-title">ہفتہ وار ای میل الرٹ</h2>
+            <p>کمزور طلباء کی ہفتہ وار رپورٹ تیار کریں۔</p>
+            
+            <div class="alert-card">
+                <strong>نوٹ:</strong> یہ ایک سمیولیٹڈ ای میل ہے۔ "رپورٹ بھیجیں" بٹن دبانے پر اصل ای میل بھیجی جائے گی۔
+            </div>
+            
+            <div class="email-simulator" id="emailContent">
+                <div class="email-header">
+                    <h3>مڈل سکول ٹاون پشین: کمزور طلباء کی ہفتہ وار رپورٹ</h3>
+                    <p>تاریخ: <span id="emailDate"></span></p>
+                </div>
+                
+                <div id="emailStats">
+                    <!-- Stats will be populated here -->
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>نام</th>
+                                <th>رول نمبر</th>
+                                <th>کلاس</th>
+                                <th>کل نمبر</th>
+                                <th>حالت</th>
+                            </tr>
+                        </thead>
+                        <tbody id="emailTableBody">
+                            <!-- Weak students will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <p>براہ کرم اس رپورٹ پر سنجیدگی سے غور کریں اور متعلقہ اساتذہ اور والدین سے رابطہ کریں تاکہ طلباء کی کارکردگی بہتر بنائی جا سکے۔</p>
+                
+                <p>شکریہ،<br>
+                فاؤنڈیشن سکول انتظامیہ</p>
+            </div>
+            
+            <button id="sendReportBtn" class="btn"><i>✉️</i> رپورٹ بھیجیں</button>
+            <button id="simulateEmailBtn" class="btn"><i>🔄</i> رپورٹ دوبارہ بنائیں</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        فاؤنڈیشن سکول رپورٹنگ سسٹم © 2023 - تمام حقوق محفوظ ہیں
+    </footer>
+
+    <script>
+        // Sample student data
+        const students = [
+            {
+                name: "احمد خان",
+                roll: "101",
+                class: "نہم",
+                whatsapp: "03033823350",
+                marks: { urdu: 75, math: 82, science: 78, biology: 80, islamiat: 85 },
+                status: "کامیاب"
+            },
+            {
+                name: "فاطمہ علی",
+                roll: "102",
+                class: "نہم",
+                whatsapp: "03033823350",
+                marks: { urdu: 45, math: 38, science: 42, biology: 50, islamiat: 55 },
+                status: "کمزور"
+            },
+            {
+                name: "زید احمد",
+                roll: "103",
+                class: "دہم",
+                whatsapp: "03033823350",
+                marks: { urdu: 82, math: 90, science: 85, biology: 88, islamiat: 92 },
+                status: "کامیاب"
+            },
+            {
+                name: "سارہ رحمان",
+                roll: "104",
+                class: "ہشتم",
+                whatsapp: "03033823350",
+                marks: { urdu: 35, math: 30, science: 28, biology: 32, islamiat: 40 },
+                status: "ناکام"
+            },
+            {
+                name: "بشیر احمد",
+                roll: "105",
+                class: "دہم",
+                whatsapp: "03033823350",
+                marks: { urdu: 65, math: 58, science: 62, biology: 60, islamiat: 70 },
+                status: "کامیاب"
+            },
+            {
+                name: "عائشہ ملک",
+                roll: "106",
+                class: "ہشتم",
+                whatsapp: "03451234567",
+                marks: { urdu: 42, math: 35, science: 38, biology: 40, islamiat: 45 },
+                status: "کمزور"
+            },
+            {
+                name: "عمر فاروق",
+                roll: "107",
+                class: "نہم",
+                whatsapp: "03033823350",
+                marks: { urdu: 78, math: 85, science: 80, biology: 82, islamiat: 88 },
+                status: "کامیاب"
+            },
+            {
+                name: "ہمایوں شاہ",
+                roll: "108",
+                class: "دہم",
+                whatsapp: "03339876543",
+                marks: { urdu: 30, math: 25, science: 22, biology: 28, islamiat: 35 },
+                status: "ناکام"
+            }
+        ];
+
+        // Tab switching functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and contents
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Show corresponding content
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+                
+                // Initialize charts when dashboard is opened
+                if (tabId === 'dashboard') {
+                    setTimeout(initCharts, 100);
+                }
+            });
+        });
+
+        // Populate student table
+        function populateStudentTable() {
+            const tbody = document.getElementById('studentTableBody');
+            tbody.innerHTML = '';
+            
+            students.forEach(student => {
+                const totalMarks = Object.values(student.marks).reduce((a, b) => a + b, 0);
+                const tr = document.createElement('tr');
+                
+                tr.innerHTML = `
+                    <td>${student.name}</td>
+                    <td>${student.roll}</td>
+                    <td>${student.class}</td>
+                    <td>${student.whatsapp}</td>
+                    <td>${student.marks.urdu}</td>
+                    <td>${student.marks.math}</td>
+                    <td>${student.marks.science}</td>
+                    <td>${student.marks.arabi}</td>
+                    <td>${student.marks.islamiat}</td>
+                    <td><strong>${totalMarks}</strong></td>
+                    <td><span class="status-${student.status === 'کامیاب' ? 'pass' : 'fail'}">${student.status}</span></td>
+                `;
+                
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Get weak students (کمزور or ناکام)
+        function getWeakStudents() {
+            return students.filter(student => 
+                student.status === 'کمزور' || student.status === 'ناکام'
+            );
+        }
+
+        // Populate WhatsApp table
+        function populateWhatsappTable() {
+            const tbody = document.getElementById('whatsappTableBody');
+            tbody.innerHTML = '';
+            
+            const weakStudents = getWeakStudents();
+            
+            weakStudents.forEach(student => {
+                const totalMarks = Object.values(student.marks).reduce((a, b) => a + b, 0);
+                const tr = document.createElement('tr');
+                
+                tr.innerHTML = `
+                    <td>${student.name}</td>
+                    <td>${student.class}</td>
+                    <td>${student.whatsapp}</td>
+                    <td><span class="status-fail">${student.status}</span></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsapp('${student.whatsapp}', '${student.name}')">
+                            <i>📱</i> میسج بھیجیں
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Populate red alert table
+        function populateRedAlertTable() {
+            const tbody = document.getElementById('redAlertTableBody');
+            tbody.innerHTML = '';
+            
+            const weakStudents = getWeakStudents();
+            
+            weakStudents.forEach(student => {
+                const totalMarks = Object.values(student.marks).reduce((a, b) => a + b, 0);
+                const tr = document.createElement('tr');
+                
+                tr.innerHTML = `
+                    <td>${student.name}</td>
+                    <td>${student.roll}</td>
+                    <td>${student.class}</td>
+                    <td>${student.whatsapp}</td>
+                    <td>${totalMarks}</td>
+                    <td><span class="status-fail">${student.status}</span></td>
+                `;
+                
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Initialize charts
+        function initCharts() {
+            // Class-wise performance chart
+            const classCtx = document.getElementById('classPerformanceChart').getContext('2d');
+            new Chart(classCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['ہشتم', 'نہم', 'دہم'],
+                    datasets: [{
+                        label: 'کلاس وار اوسط نمبر',
+                        data: [68, 72, 75],
+                        backgroundColor: ['#1a5d74', '#2a8e5d', '#3a9e7d'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+            // Subject-wise average chart
+            const subjectCtx = document.getElementById('subjectAverageChart').getContext('2d');
+            new Chart(subjectCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['اردو', 'ریاضی', 'سائنس', 'عربی', 'اسلامیات'],
+                    datasets: [{
+                        label: 'مضمون وار اوسط',
+                        data: [65, 58, 62, 68, 72],
+                        backgroundColor: 'rgba(26, 93, 116, 0.2)',
+                        borderColor: '#1a5d74',
+                        pointBackgroundColor: '#1a5d74',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#1a5d74'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+            // Pass/Fail chart
+            const passFailCtx = document.getElementById('passFailChart').getContext('2d');
+            new Chart(passFailCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['کامیاب', 'کمزور', 'ناکام'],
+                    datasets: [{
+                        data: [5, 2, 1],
+                        backgroundColor: ['#2a8e5d', '#ffc107', '#c62828'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    }
+                }
+            });
+        }
+
+        // Simulate email content
+        function populateEmailContent() {
+            const weakStudents = getWeakStudents();
+            const emailDate = document.getElementById('emailDate');
+            const emailStats = document.getElementById('emailStats');
+            const emailTableBody = document.getElementById('emailTableBody');
+            
+            // Set current date
+            const now = new Date();
+            emailDate.textContent = now.toLocaleDateString('ur-PK', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            // Calculate stats
+            const classCounts = {};
+            weakStudents.forEach(student => {
+                if (!classCounts[student.class]) {
+                    classCounts[student.class] = 0;
+                }
+                classCounts[student.class]++;
+            });
+            
+            // Display stats
+            let statsHTML = '<h4>مختصر اعداد و شمار:</h4>';
+            statsHTML += `<p>کل کمزور طلباء: <span class="badge badge-red">${weakStudents.length}</span></p>`;
+            statsHTML += '<p>کلاس وار تعداد:</p>';
+            statsHTML += '<ul>';
+            for (const cls in classCounts) {
+                statsHTML += `<li>${cls}: <span class="badge badge-blue">${classCounts[cls]}</span></li>`;
+            }
+            statsHTML += '</ul>';
+            
+            emailStats.innerHTML = statsHTML;
+            
+            // Populate table
+            emailTableBody.innerHTML = '';
+            weakStudents.forEach(student => {
+                const totalMarks = Object.values(student.marks).reduce((a, b) => a + b, 0);
+                const tr = document.createElement('tr');
+                
+                tr.innerHTML = `
+                    <td>${student.name}</td>
+                    <td>${student.roll}</td>
+                    <td>${student.class}</td>
+                    <td>${totalMarks}</td>
+                    <td><span class="status-fail">${student.status}</span></td>
+                `;
+                
+                emailTableBody.appendChild(tr);
+            });
+        }
+
+        // Send WhatsApp message
+        function sendWhatsapp(number, name) {
+            const message = `محترم والدین، آپ کے بچے ${name} کی حالیہ کارکردگی کمزور رہی ہے۔ براہ کرم توجہ دیں۔`;
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/${number}?text=${encodedMessage}`, '_blank');
+        }
+
+        // Export PDF
+        document.getElementById('exportPdfBtn').addEventListener('click', () => {
+            const element = document.getElementById('red-alert');
+            const opt = {
+                margin: 10,
+                filename: 'weak_students_report.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            // Show alert
+            alert('ریڈ الرٹ رپورٹ PDF کی صورت میں ڈاؤن لوڈ ہو رہی ہے...');
+            
+            // Generate PDF
+            html2pdf().set(opt).from(element).save();
+        });
+
+        // Send report button
+        document.getElementById('sendReportBtn').addEventListener('click', () => {
+            alert('رپورٹ کامیابی سے بھیج دی گئی ہے! تمام متعلقہ اساتذہ اور والدین کو ای میل بھیج دی گئی ہے۔');
+        });
+
+        // Simulate email button
+        document.getElementById('simulateEmailBtn').addEventListener('click', populateEmailContent);
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            populateStudentTable();
+            populateWhatsappTable();
+            populateRedAlertTable();
+            populateEmailContent();
+            initCharts();
+        });
+    </script>
+</body>
+</html>
